@@ -1,0 +1,7 @@
+name = "BurrowsWheeler"
+uuid = "28192188-37b1-11e9-1091-f359d3b0d63b"
+authors = ["Mateusz Kaduk <mateusz.kaduk@ki.se>"]
+version = "0.1.0"
+
+[deps]
+BioSequences = "7e6ae17a-c86d-528c-b3b9-7f778a29fe59"
