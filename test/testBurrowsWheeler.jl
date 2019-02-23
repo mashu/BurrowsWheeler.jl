@@ -1,5 +1,5 @@
 using BioSequences
 using Test
-T = dna"ATAATA"
 BWT = [DNA_A, DNA_T, DNA_T, DNA_A, DNA_Gap, DNA_A, DNA_A]
-@test bwt(T) == BWT
+@test bwt(dna"ATAATA") == BWT
+@test_throws ErrorException bwt(dna"ATC-A")

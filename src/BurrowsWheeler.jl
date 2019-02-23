@@ -2,6 +2,9 @@ module BurrowsWheeler
 using BioSequences
 export bwt
 function bwt(word::BioSequence{DNAAlphabet{4}})
+    if DNA_Gap in word
+        throw ArgumentError("input must not contain gaps")
+    end
     w = convert(Vector{DNA}, word)
     push!(w, DNA_Gap)
     l = Vector{DNA}()
