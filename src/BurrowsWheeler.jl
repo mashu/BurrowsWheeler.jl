@@ -2,7 +2,7 @@ module BurrowsWheeler
 using BioSequences
 export bwt_naïve, bwt, sa
     """
-        indices::Array{Int64} = sa(word::BioSequence{DNAAlphabet{4}})
+        sa(word::BioSequence{DNAAlphabet{4}})::Array{Int64}
 
     Returns the indices of lexicologically sorted suffix array from DNASequence.
     """
@@ -16,7 +16,7 @@ export bwt_naïve, bwt, sa
         return(first.(S))
     end
     """
-        bw::Array{DNA} = bwt(word::BioSequence{DNAAlphabet{4}})
+        bwt(word::BioSequence{DNAAlphabet{4}})::Array{DNA}
 
     Returns BurrowsWheeler transformation using sorted suffix array.
     """
@@ -36,7 +36,7 @@ export bwt_naïve, bwt, sa
         return(l)
     end
     """
-        bw::Array{DNA} = bwt_naïve(word::BioSequence{DNAAlphabet{4}})
+        bwt_naïve(word::BioSequence{DNAAlphabet{4}})::Array{DNA}
 
     Returns BurrowsWheeler transformation using naïve implementation with two dimensional array.
     """
@@ -59,7 +59,7 @@ export bwt_naïve, bwt, sa
     end
 
     """
-        (counts::Array{DNA}, ranks::Array{Int64}) = rank(bw::Array{DNA})
+        rank(bw::Array{DNA})::Dict{DNA,Int64}
 
     Returns ranks for the bwt(W) and counts for occurences of each symbol .
     """

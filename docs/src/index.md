@@ -1,13 +1,19 @@
 # BurrowsWheeler
 
+Set of functions operating on BioSequence type from BioJulia.
+
 ```@docs
-sa(x)
+sa(word::BioSequence{DNAAlphabet{4}})::Array{Int64}
 ```
 
 ```@docs
-bwt_naïve(x)
+bwt(word::BioSequence{DNAAlphabet{4}})::Array{DNA}
 ```
 
 ```@docs
-bwt(x)
+bwt_naïve(word::BioSequence{DNAAlphabet{4}})::Array{DNA}
+```
+
+```@docs
+rank(bw::Array{DNA})::Dict{DNA,Int64}
 ```
