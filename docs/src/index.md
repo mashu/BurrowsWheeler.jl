@@ -1,4 +1,13 @@
 # BurrowsWheeler
 
-Placeholder for package documentation.
+```@docs
+sa(x)
+```
 
+```@docs
+bwt_naïve(x)
+```
+
+```@docs
+bwt(x)
+```

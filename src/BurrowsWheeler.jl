@@ -1,6 +1,11 @@
 module BurrowsWheeler
 using BioSequences
 export  bwt_naïve, bwt, sa
+    """
+    sa(word)
+
+    Returns the indices of lexicologically sorted suffix array from DNASequence.
+    """
     function sa(word::BioSequence{DNAAlphabet{4}})
         w = copy(word)
         if DNA_Gap in w
@@ -10,6 +15,11 @@ export  bwt_naïve, bwt, sa
         S = sort!([(i, w[i:end]) for i in 1:(length(w))], by = x -> x[2])
         return(first.(S))
     end
+    """
+    bwt(word)
+
+    Returns BurrowsWheeler transformation using sorted suffix array.
+    """
     function bwt(word::BioSequence{DNAAlphabet{4}})
         l = DNA[]
         if DNA_Gap in word
@@ -25,6 +35,11 @@ export  bwt_naïve, bwt, sa
         end
         return(l)
     end
+    """
+    bwt_naïve(word)
+
+    Returns BurrowsWheeler transformation using naïve implementation with two dimensional array.
+    """
     function bwt_naïve(word::BioSequence{DNAAlphabet{4}})
         if DNA_Gap in word
             throw(ArgumentError("input must not contain gaps"))
