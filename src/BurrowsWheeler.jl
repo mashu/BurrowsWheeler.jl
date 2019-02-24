@@ -1,6 +1,6 @@
 module BurrowsWheeler
 using BioSequences
-export bwt_naïve, bwt, sa
+export bwt_naïve, bwt, sa, rank
     """
         sa(word::BioSequence{DNAAlphabet{4}})::Array{Int64}
 
