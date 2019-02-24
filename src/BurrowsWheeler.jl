@@ -1,6 +1,6 @@
 module BurrowsWheeler
 using BioSequences
-export bwt, sa
+export  bwt_naïve, bwt, sa
     function sa(word::BioSequence{DNAAlphabet{4}})
         w = copy(word)
         if DNA_Gap in w
@@ -11,6 +11,21 @@ export bwt, sa
         return(first.(S))
     end
     function bwt(word::BioSequence{DNAAlphabet{4}})
+        l = DNA[]
+        if DNA_Gap in word
+            throw(ArgumentError("input must not contain gaps"))
+        end
+        for i in sa(word)
+            j = i - 1
+            if j == 0
+                push!(l, DNA_Gap)
+            else
+                push!(l, word[j])
+            end
+        end
+        return(l)
+    end
+    function bwt_naïve(word::BioSequence{DNAAlphabet{4}})
         if DNA_Gap in word
             throw(ArgumentError("input must not contain gaps"))
         end
