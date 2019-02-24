@@ -10,3 +10,4 @@ Tg = dna"ATC-A"
 @test bwt(T) == BWT
 @test_throws ArgumentError bwt(Tg)
 @test bwt_naïve(T) == bwt(T)
+@test rank(bwt(T)) == ([0, 0, 1, 1, 0, 2, 3], Dict(DNA_Gap=>1,DNA_A=>4,DNA_T=>2))
