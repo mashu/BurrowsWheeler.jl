@@ -11,3 +11,7 @@ Tg = dna"ATC-A"
 @test_throws ArgumentError bwt(Tg)
 @test bwt_naïve(T) == bwt(T)
 @test rank(bwt(T)) == ([0, 0, 1, 1, 0, 2, 3], Dict(DNA_Gap=>1,DNA_A=>4,DNA_T=>2))
+ranks, counts = rank(bwt(T))
+col = Dict(DNA_Gap => (0,1), DNA_T => (5,7), DNA_A => (1,5))
+@test bwmcol(counts) == col
+@test revbwt(bwt(T)) == T

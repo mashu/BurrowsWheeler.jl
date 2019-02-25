@@ -1,6 +1,6 @@
 module BurrowsWheeler
 using BioSequences
-export bwt_naïve, bwt, sa, rank
+export bwt_naïve, bwt, sa, rank, bwmcol, revbwt
     """
         sa(word::BioSequence{DNAAlphabet{4}})::Array{Int64}
 
@@ -61,7 +61,7 @@ export bwt_naïve, bwt, sa, rank
     """
         rank(bw::Array{DNA})::Dict{DNA,Int64}
 
-    Returns ranks for the bwt(W) and counts for occurences of each symbol .
+    Returns ranks for the bwt(W) and counts for occurences of each symbol.
     """
     function rank(bw::Array{DNA})
         counts = Dict{DNA,Int64}()
@@ -74,5 +74,38 @@ export bwt_naïve, bwt, sa, rank
             counts[c] = counts[c] + 1
         end
         return (ranks, counts)
+    end
+
+    """
+        bwmcol(counts::Dict{DNA,Int64})::Dict{DNA,Int64}
+
+    Returns counts for the first column of bwt_naïve()
+    """
+    function bwmcol(counts::Dict{DNA,Int64})
+        col = Dict()
+        sums = 0
+        for (c, count) in sort(collect(counts), by=x->x[1])
+            col[c] = (sums, sums+count)
+            sums = sums + count
+        end
+        return(col)
+    end
+
+    """
+        revbwt(bw::Array{DNA})::Array{DNA}
+
+    Returns reverse of Burrows Wheeler transformation bwt() function.
+    """
+    function revbwt(bw::Array{DNA})
+        ranks, counts = rank(bw)
+        col = bwmcol(counts)
+        rowi = 1
+        result = DNA[DNA_Gap]
+        while bw[rowi] != DNA_Gap
+            c  = bw[rowi]
+            pushfirst!(result, c)
+            rowi = col[c][1] + ranks[rowi] + 1
+        end
+        return(DNASequence(result[:1:end-1]))
     end
 end
