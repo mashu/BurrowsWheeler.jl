@@ -44,7 +44,7 @@ export bwt_naïve, bwt, sa, rank, bwmcol, revbwt
         if DNA_Gap in word
             throw(ArgumentError("input must not contain gaps"))
         end
-        w = convert(Vector{DNA}, word)
+        w = collect(word)
         push!(w, DNA_Gap)
         l = Vector{DNA}()
         i = length(w)
@@ -106,6 +106,6 @@ export bwt_naïve, bwt, sa, rank, bwmcol, revbwt
             pushfirst!(result, c)
             rowi = col[c][1] + ranks[rowi] + 1
         end
-        return(DNASequence(result[:1:end-1]))
+        return(LongSequence{DNAAlphabet{4}}(result[1:end-1]))
     end
 end
