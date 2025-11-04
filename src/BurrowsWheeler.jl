@@ -1,6 +1,7 @@
 module BurrowsWheeler
 using BioSequences
 export bwt_naïve, bwt, sa, rank, bwmcol, revbwt
+export FMIndex, build_fmindex, search, count_occurrences, locate
 
     _alphabet_type(::Type{DNA}) = DNAAlphabet{4}
     _alphabet_type(::Type{RNA}) = RNAAlphabet{4}
@@ -145,4 +146,9 @@ export bwt_naïve, bwt, sa, rank, bwmcol, revbwt
         A = _alphabet_type(S)
         return LongSequence{A}(result[1:result_len-1])
     end
+
+include("Search.jl")
+
+import .Search: FMIndex, build_fmindex, search, count_occurrences, locate
+
 end
