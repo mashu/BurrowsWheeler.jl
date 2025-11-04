@@ -20,21 +20,17 @@ function _build_rank_arrays(bwt::Vector{S}) where {S}
     rank_arrays = Dict{S, Vector{Int64}}()
     
     unique_symbols = unique(bwt)
+    running_counts = Dict{S, Int64}()
     for sym in unique_symbols
-        rank_arrays[sym] = zeros(Int64, n)
+        rank_arrays[sym] = Vector{Int64}(undef, n)
+        running_counts[sym] = 0
     end
     
     @inbounds for idx in 1:n
         c = bwt[idx]
+        running_counts[c] += 1
         for sym in unique_symbols
-            if idx == 1
-                rank_arrays[sym][idx] = (sym == c ? 1 : 0)
-            else
-                rank_arrays[sym][idx] = rank_arrays[sym][idx - 1]
-                if sym == c
-                    rank_arrays[sym][idx] += 1
-                end
-            end
+            rank_arrays[sym][idx] = running_counts[sym]
         end
     end
     
