@@ -1,25 +1,89 @@
 module BurrowsWheeler
 using BioSequences
+using SuffixArrays
 export bwt_naïve, bwt, sa, rank, bwmcol, revbwt
 export FMIndex, build_fmindex, search, count_occurrences, locate
 
     _alphabet_type(::Type{DNA}) = DNAAlphabet{4}
     _alphabet_type(::Type{RNA}) = RNAAlphabet{4}
 
+    function _encode_dna(c::DNA)::UInt8
+        if c == DNA_Gap
+            return 0x00
+        elseif c == DNA_A
+            return 0x01
+        elseif c == DNA_C
+            return 0x02
+        elseif c == DNA_G
+            return 0x03
+        elseif c == DNA_T
+            return 0x04
+        else
+            return 0xFF
+        end
+    end
+
+    function _encode_rna(c::RNA)::UInt8
+        if c == RNA_Gap
+            return 0x00
+        elseif c == RNA_A
+            return 0x01
+        elseif c == RNA_C
+            return 0x02
+        elseif c == RNA_G
+            return 0x03
+        elseif c == RNA_U
+            return 0x04
+        else
+            return 0xFF
+        end
+    end
+
+    function _encode_sequence(sequence::BioSequence{DNAAlphabet{4}})::Vector{UInt8}
+        return [_encode_dna(c) for c in sequence]
+    end
+
+    function _encode_sequence(sequence::BioSequence{RNAAlphabet{4}})::Vector{UInt8}
+        return [_encode_rna(c) for c in sequence]
+    end
+
+    function _encode_sequence(sequence::BioSequence{A}) where {A <: Alphabet}
+        S = eltype(sequence)
+        gap_sym = gap(S)
+        encoded = UInt8[]
+        for c in sequence
+            if c == gap_sym
+                push!(encoded, 0x00)
+            else
+                push!(encoded, UInt8(c))
+            end
+        end
+        return encoded
+    end
+
     """
         sa(word::BioSequence{A}) where {A <: Alphabet}
 
     Returns the indices of lexicographically sorted suffix array.
+    Uses O(n) SA-IS algorithm via SuffixArrays.jl.
     """
     function sa(word::BioSequence{A}) where {A <: Alphabet}
-        w = copy(word)
-        gap_sym = gap(eltype(w))
-        if gap_sym in w
+        S = eltype(word)
+        gap_sym = gap(S)
+        if gap_sym in word
             throw(ArgumentError("input must not contain gaps"))
         end
-        push!(w, gap_sym)
-        S = sort!([(i, w[i:end]) for i in 1:length(w)], by = x -> x[2])
-        return first.(S)::Vector{Int64}
+        
+        encoded = _encode_sequence(word)
+        push!(encoded, 0x00)
+        
+        sa_0based = suffixsort(encoded, 0)
+        sa_1based = Vector{Int64}(undef, length(sa_0based))
+        @inbounds for (idx, s) in enumerate(sa_0based)
+            sa_1based[idx] = Int(s) + 1
+        end
+        
+        return sa_1based
     end
     """
         bwt(word::BioSequence{A}) where {A <: Alphabet}

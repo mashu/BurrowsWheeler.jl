@@ -1,6 +1,8 @@
 module Search
 
 using BioSequences
+using SuffixArrays
+using ..BurrowsWheeler
 
 export FMIndex, build_fmindex, search, count_occurrences, locate
 
@@ -131,14 +133,19 @@ end
 function build_fmindex(sequence::BioSequence{A}; sample_rate::Int64=32) where {A <: Alphabet}
     S = eltype(sequence)
     
-    w = copy(sequence)
     gap_sym = gap(S)
-    if gap_sym in w
+    if gap_sym in sequence
         throw(ArgumentError("input must not contain gaps"))
     end
-    push!(w, gap_sym)
-    S_sorted = sort!([(i, w[i:end]) for i in 1:length(w)], by = x -> x[2])
-    sa_result = first.(S_sorted)::Vector{Int64}
+    
+    encoded = BurrowsWheeler._encode_sequence(sequence)
+    push!(encoded, 0x00)
+    
+    sa_0based = suffixsort(encoded, 0)
+    sa_result = Vector{Int64}(undef, length(sa_0based))
+    @inbounds for (idx, s) in enumerate(sa_0based)
+        sa_result[idx] = Int(s) + 1
+    end
     
     bwt_result = Vector{S}(undef, length(sa_result))
     @inbounds for (idx, i) in enumerate(sa_result)
