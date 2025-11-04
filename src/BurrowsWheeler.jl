@@ -3,6 +3,7 @@ using BioSequences
 using SuffixArrays
 export bwt_naïve, bwt, sa, rank, bwmcol, revbwt
 export FMIndex, build_fmindex, search, count_occurrences, locate
+export ApproxMatch, approximate_search, approximate_locate
 
     _alphabet_type(::Type{DNA}) = DNAAlphabet{4}
     _alphabet_type(::Type{RNA}) = RNAAlphabet{4}
@@ -214,5 +215,6 @@ export FMIndex, build_fmindex, search, count_occurrences, locate
 include("Search.jl")
 
 import .Search: FMIndex, build_fmindex, search, count_occurrences, locate
+import .Search: ApproxMatch, approximate_search, approximate_locate
 
 end

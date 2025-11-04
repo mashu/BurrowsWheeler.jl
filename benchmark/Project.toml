@@ -1,0 +1,4 @@
+[deps]
+BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
+BioSequences = "7e6ae17a-c86d-528c-b3b9-7f778a29fe59"
+BurrowsWheeler = "28192188-37b1-11e9-1091-f359d3b0d63b"

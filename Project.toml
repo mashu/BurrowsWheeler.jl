@@ -4,9 +4,13 @@ authors = ["Mateusz Kaduk <mateusz.kaduk@ki.se>"]
 version = "0.1.0"
 
 [deps]
+BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
 BioSequences = "7e6ae17a-c86d-528c-b3b9-7f778a29fe59"
+Coverage = "a2441757-f6aa-5fb2-8edb-039e3f45d037"
 SuffixArrays = "24f65c1e-0a10-5d3d-8a1f-a83399f3fced"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
+BenchmarkTools = "1.6.3"
+Coverage = "1.8.1"
 SuffixArrays = "1.0.0"
